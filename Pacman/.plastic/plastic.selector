@@ -1,0 +1,4 @@
+repository "Pacman@AndrewNikitin@cloud"
+  path "/"
+    br "/main"
+    co "/main"
