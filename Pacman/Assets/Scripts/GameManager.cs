@@ -79,4 +79,16 @@ public class GameManager : MonoBehaviour
         pacman.gameObject.SetActive(false);
         SetLives(Lives - 1);
     }
+
+    public void PelletEaten(Pellet pellet)
+    {
+        pellet.gameObject.SetActive(false);
+        SetLives(Score + pellet.points);
+    }
+    public void PowerEaten(PowerPellets pellets)
+    {
+        PelletEaten(pellets);
+    }
+    // 1 37
+
 }
