@@ -31,4 +31,10 @@ public class Pacman : MonoBehaviour
         _anglePacmanSprite = Mathf.Atan2(_movment.direction.y, _movment.direction.x);
         transform.rotation = Quaternion.AngleAxis(_anglePacmanSprite * Mathf.Rad2Deg,Vector3.forward);
     }
+
+    public void ResetState()
+    {
+        _movment.ResetState();
+        gameObject.SetActive(true);
+    }
 }
