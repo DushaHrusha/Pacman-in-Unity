@@ -3,18 +3,14 @@ using UnityEngine;
 public class Pellet : MonoBehaviour
 {
     public int points = 10;
-    private protected GameManager manager;
-    private void Awake()
+
+    public virtual void Eat()
     {
-        manager = FindObjectOfType<GameManager>();
-    }
-    private protected virtual void Eat()
-    {
-        manager.PelletEaten(this);
+        FindObjectOfType<GameManager>().PelletEaten(this);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Pacman"))
+        if(collision.GetComponent<Pacman>() != null )
         {
             Eat();
         }

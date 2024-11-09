@@ -1,36 +1,53 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent (typeof(SpriteRenderer))]
+[RequireComponent(typeof(SpriteRenderer))]
 public class AnimatedSprite : MonoBehaviour
 {
-    [SerializeField] private Sprite[] _sprites;
-    private SpriteRenderer _spriteRenderer;
-    private readonly float animationTime = 0.125f;
-    private bool loop = true;
+    public SpriteRenderer sprRenderer { get; private set; }
+
+    public Sprite[] sprites = new Sprite[0];
+
+    public float animationTime = 0.25f;
+
     public int animationFrame { get; private set; }
 
+    public bool loop = true;
     private void Awake()
     {
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-    }
-    private void Start()
-    {
-        InvokeRepeating(nameof(Advance), animationTime, animationTime);
-    }
-    private void Advance()
-    {
-        // костыль конкретный, нужно переделть в будущем в сопрограмму
-        if (!_spriteRenderer.enabled)
-            return;
-        animationFrame++;
-        if (animationFrame >= _sprites.Length && loop)
-            animationFrame = 0;
-        _spriteRenderer.sprite = _sprites[animationFrame];
+        sprRenderer = GetComponent<SpriteRenderer>();
     }
 
-    private void Reset()
+    private void Start()
+    {
+        InvokeRepeating(nameof(Advance), animationTime, animationTime); // to change to coroutine
+    }
+
+    private void Advance()
+    {
+        if (!sprRenderer.enabled)
+        {
+            return;
+        }
+
+        animationFrame++;
+
+        if(animationFrame >= sprites.Length && loop)
+        {
+            animationFrame = 0;
+        }
+
+        if(animationFrame >=0 && animationFrame < sprites.Length)
+        {
+            sprRenderer.sprite = sprites[animationFrame];
+        }
+    }
+
+    public void Restart()
     {
         animationFrame = -1;
+
         Advance();
     }
 }

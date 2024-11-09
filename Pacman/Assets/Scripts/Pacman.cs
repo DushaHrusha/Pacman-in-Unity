@@ -1,40 +1,38 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Movement))]
 public class Pacman : MonoBehaviour
 {
-    private Movement _movment;
-    private float _anglePacmanSprite;
+    public Movement movement { get; private set; }
     private void Awake()
     {
-        _movment = GetComponent<Movement>();
+        movement = GetComponent<Movement>();
     }
-
     private void Update()
     {
-        if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
-            _movment.SetDirection(Vector2.up);
+            movement.SetDirection(Vector2.up);
         }
-        else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
         {
-            _movment.SetDirection(Vector2.down);
+            movement.SetDirection(Vector2.down);
         }
-        else if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            _movment.SetDirection(Vector2.right);
+            movement.SetDirection(Vector2.left);
         }
-        else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
         {
-            _movment.SetDirection(Vector2.left);
+            movement.SetDirection(Vector2.right);
         }
-        _anglePacmanSprite = Mathf.Atan2(_movment.direction.y, _movment.direction.x);
-        transform.rotation = Quaternion.AngleAxis(_anglePacmanSprite * Mathf.Rad2Deg,Vector3.forward);
+
+        float angle = Mathf.Atan2(this.movement.direction.y, this.movement.direction.x);
+        this.transform.rotation = Quaternion.AngleAxis(angle * Mathf.Rad2Deg, Vector3.forward);
     }
 
     public void ResetState()
     {
-        _movment.ResetState();
-        gameObject.SetActive(true);
+        movement.ResetState();
+        this.gameObject.SetActive(true);
     }
 }

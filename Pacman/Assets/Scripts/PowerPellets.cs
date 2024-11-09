@@ -4,8 +4,8 @@ public class PowerPellets : Pellet
 {
     public readonly float duration = 8f;
 
-    private protected override void Eat()
+    public override void Eat()
     {
-        manager.PowerPelletEaten(this);
+       // GameManager.PowerPelletEaten(this);
     }
 }

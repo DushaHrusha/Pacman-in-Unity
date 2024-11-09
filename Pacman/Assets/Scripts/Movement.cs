@@ -3,20 +3,25 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Movement : MonoBehaviour
 {
-    public float speed = 8f;
-    public float speedMultiplier = 1f;
-    public Vector2 initialDirection;
-    public LayerMask obstacleLayer;
+    public float speedMultiplayer = 1.0f;
 
-    public new Rigidbody2D rigidbody { get; private set; }
+    public float speed = 8.0f;
+
+    public Vector2 initialDirection;
+
     public Vector2 direction { get; private set; }
+
     public Vector2 nextDirection { get; private set; }
+
     public Vector3 startingPosition { get; private set; }
+
+    public LayerMask obstacleLayer;
+    public Rigidbody2D rigidb { get; private set; }
 
     private void Awake()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
-        startingPosition = transform.position;
+        rigidb = GetComponent<Rigidbody2D>();
+        this.startingPosition = this.transform.position;
     }
 
     private void Start()
@@ -26,38 +31,31 @@ public class Movement : MonoBehaviour
 
     public void ResetState()
     {
-        speedMultiplier = 1f;
+        speedMultiplayer = 1.0f;
         direction = initialDirection;
         nextDirection = Vector2.zero;
-        transform.position = startingPosition;
-        rigidbody.isKinematic = false;
-        enabled = true;
+        this.transform.position = this.startingPosition;
+        rigidb.isKinematic = false;
+        this.enabled = true;
     }
 
     private void Update()
     {
-        // Try to move in the next direction while it's queued to make movements
-        // more responsive
-        if (nextDirection != Vector2.zero)
+        if(nextDirection != Vector2.zero)
         {
             SetDirection(nextDirection);
         }
     }
-
     private void FixedUpdate()
     {
-        Vector2 position = rigidbody.position;
-        Vector2 translation = direction * speed * speedMultiplier * Time.fixedDeltaTime;
-
-        rigidbody.MovePosition(position + translation);
+        Vector2 position = rigidb.position;
+        Vector2 translation = direction * speed * speedMultiplayer * Time.fixedDeltaTime;
+        rigidb.MovePosition(position + translation);
     }
 
-    public void SetDirection(Vector2 direction, bool forced = false)
+    public void SetDirection (Vector2 direction, bool forced = false)
     {
-        // Only set the direction if the tile in that direction is available
-        // otherwise we set it as the next direction so it'll automatically be
-        // set when it does become available
-        if (forced || !Occupied(direction))
+        if(!Occupied(direction) || forced)
         {
             this.direction = direction;
             nextDirection = Vector2.zero;
@@ -70,10 +68,7 @@ public class Movement : MonoBehaviour
 
     public bool Occupied(Vector2 direction)
     {
-        // If no collider is hit then there is no obstacle in that direction
-        RaycastHit2D hit = Physics2D.BoxCast(transform.position, Vector2.one * 0.75f, 0f, direction, 1.5f, obstacleLayer);
+        RaycastHit2D hit = Physics2D.BoxCast(this.transform.position, Vector2.one * 0.75f, 0.0f, direction, 1.5f, obstacleLayer);
         return hit.collider != null;
     }
-
-
 }
